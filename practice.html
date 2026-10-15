@@ -20,7 +20,7 @@ h1{font:600 clamp(24px,4vw,32px)/1.2 Unbounded,sans-serif;letter-spacing:-.02em;
 .sub{color:var(--muted);margin-bottom:24px}
 .panel{background:var(--card);border-radius:28px;padding:24px 22px;box-shadow:0 30px 60px -34px rgba(27,39,64,.35)}
 .phase{font-size:14px;color:var(--muted);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.b{padding:12px 16px;border-radius:20px;margin-bottom:10px;max-width:86%;font-size:16px;line-height:1.45;animation:pop .4s}
+.b{padding:12px 16px;border-radius:20px;margin-bottom:10px;max-width:86%;font-size:16px;line-height:1.45;animation:pop .4s;overflow-wrap:anywhere}
 .b.them{background:var(--sky);border-bottom-left-radius:6px}
 .b.me{background:var(--coral);color:#1B2740;margin-left:auto;border-bottom-right-radius:6px}
 .tip{background:var(--sun);color:#1B2740;border-radius:14px;padding:10px 14px;font-size:14px;font-weight:500;margin:6px 0 14px;animation:pop .4s}
@@ -30,13 +30,14 @@ h1{font:600 clamp(24px,4vw,32px)/1.2 Unbounded,sans-serif;letter-spacing:-.02em;
 .opt:hover{border-color:var(--coral)}
 .opt:focus-visible,textarea:focus-visible,.send:focus-visible,summary:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 form{display:flex;gap:10px;margin-top:14px}
-textarea{flex:1;resize:none;height:56px;border:2px solid var(--line);background:transparent;color:var(--ink);font:400 16px/1.4 Onest,sans-serif;padding:10px 14px;border-radius:16px}
+textarea{flex:1;resize:vertical;min-width:0;height:56px;min-height:56px;max-height:160px;border:2px solid var(--line);background:transparent;color:var(--ink);font:400 16px/1.4 Onest,sans-serif;padding:10px 14px;border-radius:16px}
 .send{background:var(--ink);color:var(--bg);border:0;border-radius:16px;padding:0 20px;font:600 15px Onest,sans-serif;cursor:pointer}
 .send:disabled{opacity:.5;cursor:wait}
 details{margin-top:22px;color:var(--muted);font-size:15px}
 summary{cursor:pointer}
 details input{width:100%;margin-top:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:400 15px Onest,sans-serif;padding:10px 14px;border-radius:12px}
 details p{margin-top:8px;font-size:14px}
+@media(max-width:420px){body{padding-left:12px;padding-right:12px}.panel{padding:20px 14px}form{gap:8px}.send{padding:0 14px}}
 @media(prefers-reduced-motion:reduce){.b,.tip{animation:none}}
 </style>
 </head>
@@ -44,7 +45,7 @@ details p{margin-top:8px;font-size:14px}
 <div class="top"><a class="logo" href="index.html">Клик<i></i></a><a class="back" href="index.html">Назад</a></div>
 <main>
   <h1>Запознавање со нова личност</h1>
-  <p class="sub">Сами пишуваш одговори и вежбаш вистински разговор.</p>
+  <p class="sub">Прво избираш одговор, потоа пишуваш сам.</p>
   <div class="panel">
     <div class="phase" id="phase">Дел 1: напиши сам</div>
     <div id="chat" aria-live="polite"></div>
@@ -62,123 +63,200 @@ details p{margin-top:8px;font-size:14px}
 </main>
 
 <script>
-const MODEL='gemini-3.5-flash-lite'; // ако дава грешка, смени го со тековниот бесплатен модел од Google AI Studio
-const WORKER_URL='https://klik-ai.ljubicasemenkova60.workers.dev'; // адресата на твојот Cloudflare Worker (остави '' ако немаш)
+const MODEL='gemini-3.5-flash-lite';
+const WORKER_URL='https://klik-ai.ljubicasemenkova60.workers.dev';
 const PERSONA='Ти си љубезна личност во група која ја посетува. Другата личност е нов во групата и вежба разговор.';
+
 const picks=[
-{them:'Здраво! Не те видов претходно. Си нов во групата?',opts:[
- {t:'Да.',ok:0,tip:'Премногу кратко. Додај нешто за себе или постави прашање.'},
- {t:'Да, денес сум првпат. Јас сум Марко.',ok:1,tip:'Добро: се претстави и даде повод за продолжение.'},
- {t:'Да, нов сум. Ти колку си тука?',ok:1,tip:'Добро: прашањето назад го држи разговорот жив.'},
- {t:'А ти што те интересира?',ok:0,tip:'Прашање без одговор на неговото прашање звучи чудно.'}]},
-{them:'Мило ми е! Како не најде?',opts:[
- {t:'Преку другар. А ти од кога доаѓаш?',ok:1,tip:'Добро: му врати прашање на соговорникот.'},
- {t:'Преку интернет.',ok:0,tip:'Точно, но разговорот запира. Врати прашање.'},
- {t:'Не се сеќавам.',ok:0,tip:'Пробај со кратка вистинита причина.'},
- {t:'Другар ми кажа за вас, па реков да пробам. А ти?',ok:1,tip:'Добро: дадена причина плус прашање назад.'}]}
+  {them:'Здраво! Не те видов претходно. Си нов во групата?'},
+  {them:'Мило ми е! Како не најде?'}
 ];
+
 const FREE_START='Јас сум тука веќе две години. Ако сакаш, ќе те запознаам со другите.';
-const SCRIPTED=['Супер, ајде. Што те донесе овде токму сега?','Интересно! Јас сум тука заради другарите. Имаш ли некое хоби?','Мило ми беше да поразговараме.'];
+const SCRIPTED=[
+  'Супер, ајде. Што те донесе овде токму сега?',
+  'Интересно! Јас сум тука заради другарите. Имаш ли некое хоби?',
+  'Мило ми беше да поразговараме.'
+];
 const MAXT=3;
 
-const chat=document.getElementById('chat'),opts=document.getElementById('opts'),form=document.getElementById('form'),input=document.getElementById('input'),send=document.getElementById('send'),keyEl=document.getElementById('key'),phase=document.getElementById('phase');
-let hist=[],score=0,turns=0,pickIndex=0;
-const hasAI=()=>WORKER_URL||keyEl.value.trim();
-if(WORKER_URL)document.getElementById('keybox').hidden=true;
-try{keyEl.value=sessionStorage.getItem('gk')||''}catch(e){}
-keyEl.addEventListener('input',()=>{try{sessionStorage.setItem('gk',keyEl.value.trim())}catch(e){}});
+const chat=document.getElementById('chat');
+const opts=document.getElementById('opts');
+const form=document.getElementById('form');
+const input=document.getElementById('input');
+const send=document.getElementById('send');
+const keyEl=document.getElementById('key');
+const phase=document.getElementById('phase');
 
-function add(cls,txt){const d=document.createElement('div');d.className=cls;d.textContent=txt;chat.appendChild(d);d.scrollIntoView({block:'nearest'});return d}
-function btn(txt,fn){const b=document.createElement('button');b.className='opt';b.textContent=txt;b.onclick=fn;opts.appendChild(b)}
+let hist=[];
+let turns=0;
+let pickIndex=0;
+let waitingForAI=false;
+let finished=false;
+
+const hasAI=()=>Boolean(WORKER_URL||keyEl.value.trim());
+
+if(WORKER_URL)document.getElementById('keybox').hidden=true;
+
+try{
+  keyEl.value=sessionStorage.getItem('gk')||'';
+}catch(e){}
+
+keyEl.addEventListener('input',()=>{
+  try{sessionStorage.setItem('gk',keyEl.value.trim());}catch(e){}
+});
+
+function add(cls,txt){
+  const d=document.createElement('div');
+  d.className=cls;
+  d.textContent=txt;
+  chat.appendChild(d);
+  d.scrollIntoView({block:'nearest',behavior:'smooth'});
+  return d;
+}
+
+function btn(txt,fn){
+  const b=document.createElement('button');
+  b.className='opt';
+  b.textContent=txt;
+  b.onclick=fn;
+  opts.appendChild(b);
+}
 
 async function ai(system,msgs){
- const contents=[{role:'user',parts:[{text:'(почеток на вежбата)'}]}].concat(msgs.map(m=>({role:m.role==='me'?'user':'model',parts:[{text:m.text}]})));
- const payload=JSON.stringify({systemInstruction:{parts:[{text:system}]},contents});
- const r=WORKER_URL
-  ?await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:payload})
-  :await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+MODEL+':generateContent?key='+encodeURIComponent(keyEl.value.trim()),{method:'POST',headers:{'Content-Type':'application/json'},body:payload});
- const j=await r.json();
- if(!r.ok)throw new Error((j.error&&j.error.message)||'Грешка со API');
- return j.candidates[0].content.parts[0].text.trim();
+  const contents=msgs.map(m=>({
+    role:m.role==='me'?'user':'model',
+    parts:[{text:m.text}]
+  }));
+
+  const payload=JSON.stringify({
+    systemInstruction:{parts:[{text:system}]},
+    contents
+  });
+
+  const r=WORKER_URL
+    ?await fetch(WORKER_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:payload
+      })
+    :await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/'
+        +MODEL+':generateContent?key='+encodeURIComponent(keyEl.value.trim()),
+        {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:payload
+        }
+      );
+
+  const j=await r.json();
+
+  if(!r.ok)throw new Error((j.error&&j.error.message)||'Грешка со API');
+
+  const reply=j.candidates?.[0]?.content?.parts?.[0]?.text;
+  if(!reply)throw new Error('AI не врати одговор.');
+
+  return reply.trim();
 }
 
 function pick(i){
- if(i>=picks.length){
-  phase.textContent='Дел 2: напиши сам ('+MAXT+' одговори)';
-  add('b them',FREE_START);
-  hist.push({role:'them',text:FREE_START});
-  form.hidden=false;
-  input.focus();
-  return;
- }
+  if(i>=picks.length){
+    phase.textContent='Дел 2: напиши сам ('+MAXT+' одговори)';
+    add('b them',FREE_START);
+    hist.push({role:'them',text:FREE_START});
+    input.focus();
+    return;
+  }
 
- add('b them',picks[i].them);
- hist.push({role:'them',text:picks[i].them});
- form.hidden=false;
- input.focus();
+  add('b them',picks[i].them);
+  hist.push({role:'them',text:picks[i].them});
+
+  // Не се прикажуваат понудени одговори.
+  opts.innerHTML='';
+  input.focus();
 }
 
 form.addEventListener('submit',async e=>{
- e.preventDefault();
+  e.preventDefault();
 
- const text=input.value.trim();
- if(!text)return;
+  if(waitingForAI||finished)return;
 
- input.value='';
- send.disabled=true;
- add('b me',text);
- hist.push({role:'me',text});
+  const text=input.value.trim();
+  if(!text)return;
 
- // Првите две пораки се дел од воведниот разговор.
- // Корисникот пишува сам, без понудени одговори.
- if(pickIndex<picks.length){
-  pickIndex++;
-  pick(pickIndex);
-  send.disabled=false;
-  input.focus();
-  return;
- }
+  input.value='';
+  add('b me',text);
+  hist.push({role:'me',text});
 
- // Продолжување на разговорот со AI или готови реплики.
- turns++;
- const wait=add('b them','...');
- let reply;
-
- if(hasAI()){
-  try{
-   reply=await ai(PERSONA+' Одговарај на македонски (кирилица), со 1 до 2 кратки реченици, како вистинска личност а не како асистент. Не давај совети.',hist);
+  // Првите две прашања: корисникот пишува сам.
+  if(pickIndex<picks.length){
+    pickIndex++;
+    pick(pickIndex);
+    return;
   }
-  catch(err){
-   add('tip no',err.message);
-   reply=SCRIPTED[Math.min(turns-1,SCRIPTED.length-1)];
+
+  waitingForAI=true;
+  send.disabled=true;
+  input.disabled=true;
+
+  turns++;
+
+  const wait=add('b them','...');
+  let reply;
+
+  if(hasAI()){
+    try{
+      reply=await ai(
+        PERSONA+' Одговарај на македонски (кирилица), со 1 до 2 кратки реченици, како вистинска личност а не како асистент. Одговори природно на последната порака и одржувај го контекстот. Не давај совети.',
+        hist
+      );
+    }catch(err){
+      add('tip no',err.message);
+      reply=SCRIPTED[Math.min(turns-1,SCRIPTED.length-1)];
+    }
+  }else{
+    reply=SCRIPTED[Math.min(turns-1,SCRIPTED.length-1)];
   }
- }else{
-  reply=SCRIPTED[Math.min(turns-1,SCRIPTED.length-1)];
- }
 
- wait.textContent=reply;
- hist.push({role:'them',text:reply});
+  wait.textContent=reply;
+  hist.push({role:'them',text:reply});
 
- if(turns>=MAXT){
-  form.hidden=true;
-  await finish();
- }else{
+  waitingForAI=false;
   send.disabled=false;
-  input.focus();
- }
+  input.disabled=false;
+
+  if(turns>=MAXT){
+    finished=true;
+    form.hidden=true;
+    await finish();
+  }else{
+    input.focus();
+  }
 });
 
 async function finish(){
- phase.textContent='Готово';
- let fb='Совет: во секој одговор дај малку информација за себе и врати едно прашање. За повратна информација напишана за твојот разговор, потребен е AI.';
- if(hasAI()){
-  try{
-   const t=hist.map(m=>(m.role==='me'?'Вежбач: ':'Соговорник: ')+m.text).join('\n');
-   fb=await ai('Ти си љубезен тренер за социјални вештини. Напиши на македонски (кирилица) кратка повратна информација за разговорот: една работа што помина добро и еден конкретен совет. Максимум 3 реченици.',[{role:'me',text:t}]);
-  }catch(err){add('tip no',err.message)}
- }
- add('tip',fb);
- btn('Пробај повторно',()=>location.reload());
+  phase.textContent='Готово';
+
+  let fb='Совет: во секој одговор дај малку информација за себе и врати едно прашање. За повратна информација напишана за твојот разговор, потребен е AI.';
+
+  if(hasAI()){
+    try{
+      const t=hist.map(m=>
+        (m.role==='me'?'Вежбач: ':'Соговорник: ')+m.text
+      ).join('\n');
+
+      fb=await ai(
+        'Ти си љубезен тренер за социјални вештини. Напиши на македонски (кирилица) кратка повратна информација за разговорот: една работа што помина добро и еден конкретен совет. Максимум 3 реченици.',
+        [{role:'me',text:t}]
+      );
+    }catch(err){
+      add('tip no',err.message);
+    }
+  }
+
+  add('tip',fb);
+  btn('Пробај повторно',()=>location.reload());
 }
 
 // Почеток на вежбата
