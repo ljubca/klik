@@ -2,265 +2,763 @@
 <!DOCTYPE html>
 <html lang="mk">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Клик – вежба</title>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#E9F0F6;--ink:#1B2740;--muted:#52607A;--card:#FFFFFF;--sun:#FFC94D;--coral:#FF8C7A;--sky:#BFD8EE;--line:#C9D6E3}
-@media (prefers-color-scheme:dark){:root{--bg:#141C2E;--ink:#EAF0F8;--muted:#9FB0C8;--card:#1E2942;--sky:#2B3D5E;--line:#2B3A57}}
-*{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--ink);font:400 17px/1.6 Onest,system-ui,sans-serif;padding:0 20px 48px}
-.top{max-width:640px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:22px 0}
-.logo{font:600 22px Unbounded,sans-serif;letter-spacing:-.02em;color:var(--ink);text-decoration:none}
-.logo i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--coral);margin-left:4px}
-.back{color:var(--muted);font-size:15px}
-main{max-width:640px;margin:0 auto}
-h1{font:600 clamp(24px,4vw,32px)/1.2 Unbounded,sans-serif;letter-spacing:-.02em;margin-bottom:8px}
-.sub{color:var(--muted);margin-bottom:24px}
-.panel{background:var(--card);border-radius:28px;padding:24px 22px;box-shadow:0 30px 60px -34px rgba(27,39,64,.35)}
-.phase{font-size:14px;color:var(--muted);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.b{padding:12px 16px;border-radius:20px;margin-bottom:10px;max-width:86%;font-size:16px;line-height:1.45;animation:pop .4s;overflow-wrap:anywhere}
-.b.them{background:var(--sky);border-bottom-left-radius:6px}
-.b.me{background:var(--coral);color:#1B2740;margin-left:auto;border-bottom-right-radius:6px}
-.tip{background:var(--sun);color:#1B2740;border-radius:14px;padding:10px 14px;font-size:14px;font-weight:500;margin:6px 0 14px;animation:pop .4s}
-.tip.no{background:var(--sky);color:var(--ink)}
-@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.opt{display:block;width:100%;text-align:left;background:transparent;border:2px solid var(--line);color:var(--ink);font:500 15px/1.4 Onest,sans-serif;padding:10px 14px;border-radius:16px;margin-top:8px;cursor:pointer;transition:border-color .15s}
-.opt:hover{border-color:var(--coral)}
-.opt:focus-visible,textarea:focus-visible,.send:focus-visible,summary:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-form{display:flex;gap:10px;margin-top:14px}
-textarea{flex:1;resize:vertical;min-width:0;height:56px;min-height:56px;max-height:160px;border:2px solid var(--line);background:transparent;color:var(--ink);font:400 16px/1.4 Onest,sans-serif;padding:10px 14px;border-radius:16px}
-.send{background:var(--ink);color:var(--bg);border:0;border-radius:16px;padding:0 20px;font:600 15px Onest,sans-serif;cursor:pointer}
-.send:disabled{opacity:.5;cursor:wait}
-details{margin-top:22px;color:var(--muted);font-size:15px}
-summary{cursor:pointer}
-details input{width:100%;margin-top:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:400 15px Onest,sans-serif;padding:10px 14px;border-radius:12px}
-details p{margin-top:8px;font-size:14px}
-@media(max-width:420px){body{padding-left:12px;padding-right:12px}.panel{padding:20px 14px}form{gap:8px}.send{padding:0 14px}}
-@media(prefers-reduced-motion:reduce){.b,.tip{animation:none}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Клик – вежба</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue: #b9d9ff;
+      --blue-dark: #4679b9;
+      --coral: #ffaaa0;
+      --yellow: #ffe99a;
+      --cream: #fffaf1;
+      --ink: #293344;
+      --muted: #718096;
+      --border: #e6eaf0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 14px;
+      background:
+        radial-gradient(circle at 10% 5%, #e3efff 0, transparent 30%),
+        radial-gradient(circle at 90% 90%, #ffe6df 0, transparent 30%),
+        var(--cream);
+      color: var(--ink);
+      font-family: 'Onest', sans-serif;
+    }
+
+    button, textarea { font: inherit; }
+
+    .page {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .logo {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .logo span { color: var(--blue-dark); }
+
+    .tag {
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: var(--yellow);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .heading { margin-bottom: 18px; }
+
+    .heading h1 {
+      margin: 0 0 9px;
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(23px, 5vw, 34px);
+      line-height: 1.3;
+      letter-spacing: -1px;
+    }
+
+    .heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .scenario {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 16px;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255,255,255,.8);
+    }
+
+    .scenario-icon {
+      display: grid;
+      flex-shrink: 0;
+      width: 45px;
+      height: 45px;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--blue);
+      font-size: 23px;
+    }
+
+    .scenario strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .scenario small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .progress-area { margin-bottom: 15px; }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #e9edf2;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue-dark);
+      transition: width .3s ease;
+    }
+
+    .chat-card {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 23px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 12px 35px rgba(47,66,93,.07);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 15px 18px;
+      border-bottom: 1px solid var(--border);
+      background: #fbfcff;
+    }
+
+    .avatar {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--coral);
+      font-size: 20px;
+    }
+
+    .chat-header strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .chat-header small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .phase {
+      margin-left: auto;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--yellow);
+      font-size: 10px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .chat {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      min-height: 270px;
+      max-height: 440px;
+      overflow-y: auto;
+      padding: 20px 16px;
+      scroll-behavior: smooth;
+    }
+
+    .bubble {
+      max-width: 86%;
+      padding: 12px 15px;
+      border-radius: 17px;
+      font-size: 14px;
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .them {
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+      background: #edf4ff;
+    }
+
+    .me {
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+      background: #ffebe7;
+    }
+
+    .typing {
+      align-self: flex-start;
+      padding: 11px 14px;
+      border-radius: 15px;
+      background: #edf4ff;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .composer {
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      background: #fbfcff;
+    }
+
+    .composer form {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .composer textarea {
+      display: block;
+      flex: 1;
+      width: 100%;
+      min-height: 48px;
+      max-height: 130px;
+      resize: vertical;
+      padding: 13px 14px;
+      border: 1px solid #dfe5ee;
+      border-radius: 15px;
+      outline: none;
+      background: white;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .composer textarea:focus {
+      border-color: var(--blue-dark);
+      box-shadow: 0 0 0 3px rgba(70,121,185,.1);
+    }
+
+    .send {
+      display: grid;
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border: none;
+      border-radius: 15px;
+      background: var(--blue-dark);
+      color: white;
+      font-size: 21px;
+      cursor: pointer;
+    }
+
+    .send:disabled,
+    .end-button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      margin: 9px 3px 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .end-row {
+      display: flex;
+      justify-content: center;
+      padding-top: 13px;
+    }
+
+    .end-button {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #f0c7c1;
+      border-radius: 13px;
+      background: #fff0ed;
+      color: #9b4940;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .end-button:hover:not(:disabled) {
+      background: #ffe2dc;
+      transform: translateY(-1px);
+    }
+
+    .result {
+      margin-top: 17px;
+      padding: 20px;
+      border: 1px solid #d4e5f8;
+      border-radius: 20px;
+      background: white;
+    }
+
+    .result h2 {
+      margin: 0 0 10px;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 19px;
+      line-height: 1.5;
+    }
+
+    .result p {
+      color: #536175;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .retry {
+      padding: 12px 17px;
+      border: none;
+      border-radius: 13px;
+      background: var(--blue);
+      color: var(--ink);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 480px) {
+      body { padding: 17px 10px; }
+      .tag { font-size: 10px; }
+      .chat { min-height: 240px; padding: 15px 12px; }
+      .bubble { max-width: 92%; }
+      .phase { max-width: 105px; line-height: 1.4; }
+    }
+  </style>
 </head>
+
 <body>
-<div class="top"><a class="logo" href="index.html">Клик<i></i></a><a class="back" href="index.html">Назад</a></div>
-<main>
-  <h1>Запознавање со нова личност</h1>
-  <p class="sub">Прво избираш одговор, потоа пишуваш сам.</p>
-  <div class="panel">
-    <div class="phase" id="phase">Дел 1: напиши сам</div>
-    <div id="chat" aria-live="polite"></div>
-    <div id="opts"></div>
-    <form id="form">
-      <textarea id="input" placeholder="Напиши го твојот одговор..." required></textarea>
-      <button class="send" id="send" type="submit">Прати</button>
-    </form>
-  </div>
-  <details id="keybox">
-    <summary>AI поставки (по избор)</summary>
-    <input id="key" type="password" placeholder="Залепи Gemini API клуч" autocomplete="off">
-    <p>Без клуч, соговорникот одговара со готови реплики. Клучот се чува само во овој таб.</p>
-  </details>
-</main>
+  <main class="page">
+    <header class="top">
+      <div class="logo">клик<span>.</span></div>
+      <div class="tag">ВЕЖБА ЗА КОМУНИКАЦИЈА</div>
+    </header>
 
-<script>
-const MODEL='gemini-3.5-flash-lite';
-const WORKER_URL='https://klik-ai.ljubicasemenkova60.workers.dev';
-const PERSONA='Ти си љубезна личност во група која ја посетува. Другата личност е нов во групата и вежба разговор.';
+    <section class="heading">
+      <h1>Вежбај разговори,<br>на свој начин.</h1>
+      <p>Разговарај со свое темпо. Кога ќе завршиш, добиј повратни информации за тоа како ти одело.</p>
+    </section>
 
-const picks=[
-  {them:'Здраво! Не те видов претходно. Си нов во групата?'},
-  {them:'Мило ми е! Како не најде?'}
-];
+    <section class="scenario">
+      <div class="scenario-icon">👋</div>
+      <div>
+        <strong>Запознавање со нова личност</strong>
+        <small>Вежбај како да започнеш разговор и да го продолжиш природно.</small>
+      </div>
+    </section>
 
-const FREE_START='Јас сум тука веќе две години. Ако сакаш, ќе те запознаам со другите.';
-const SCRIPTED=[
-  'Супер, ајде. Што те донесе овде токму сега?',
-  'Интересно! Јас сум тука заради другарите. Имаш ли некое хоби?',
-  'Мило ми беше да поразговараме.'
-];
-const MAXT=3;
+    <section class="progress-area">
+      <div class="progress-label">
+        <span id="progressText">Почеток на вежбата</span>
+        <span id="progressNumber">0 пораки</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </section>
 
-const chat=document.getElementById('chat');
-const opts=document.getElementById('opts');
-const form=document.getElementById('form');
-const input=document.getElementById('input');
-const send=document.getElementById('send');
-const keyEl=document.getElementById('key');
-const phase=document.getElementById('phase');
+    <section class="chat-card">
+      <header class="chat-header">
+        <div class="avatar">🙂</div>
+        <div>
+          <strong>Нова личност</strong>
+          <small id="statusText">Подготвен разговор</small>
+        </div>
+        <div class="phase" id="phase">Запознавање</div>
+      </header>
 
-let hist=[];
-let turns=0;
-let pickIndex=0;
-let waitingForAI=false;
-let finished=false;
+      <div class="chat" id="chat" aria-live="polite"></div>
 
-const hasAI=()=>Boolean(WORKER_URL||keyEl.value.trim());
+      <div class="composer">
+        <form id="messageForm">
+          <textarea
+            id="messageInput"
+            placeholder="Напиши го твојот одговор..."
+            aria-label="Твојот одговор"
+            rows="1"
+            required
+          ></textarea>
+          <button class="send" id="sendButton" type="submit" aria-label="Испрати">➤</button>
+        </form>
 
-if(WORKER_URL)document.getElementById('keybox').hidden=true;
+        <p class="hint" id="hint">Пишувај со свои зборови. Нема понудени одговори.</p>
 
-try{
-  keyEl.value=sessionStorage.getItem('gk')||'';
-}catch(e){}
+        <div class="end-row">
+          <button class="end-button" id="endButton" type="button">
+            Заврши разговор
+          </button>
+        </div>
+      </div>
+    </section>
 
-keyEl.addEventListener('input',()=>{
-  try{sessionStorage.setItem('gk',keyEl.value.trim());}catch(e){}
-});
+    <section class="result" id="result" hidden>
+      <h2>Твоја повратна информација ✨</h2>
+      <p id="feedback">AI ја анализира твојата комуникација...</p>
+      <button class="retry" id="retryButton" type="button">Пробај повторно ↻</button>
+    </section>
+  </main>
 
-function add(cls,txt){
-  const d=document.createElement('div');
-  d.className=cls;
-  d.textContent=txt;
-  chat.appendChild(d);
-  d.scrollIntoView({block:'nearest',behavior:'smooth'});
-  return d;
-}
+  <script>
+    const MODEL = 'gemini-3.5-flash-lite';
+    const WORKER_URL = 'https://klik-ai.ljubicasemenkova60.workers.dev';
 
-function btn(txt,fn){
-  const b=document.createElement('button');
-  b.className='opt';
-  b.textContent=txt;
-  b.onclick=fn;
-  opts.appendChild(b);
-}
+    const PERSONA = `
+Ти си пријателска личност во реалистична вежба за социјални вештини на македонски јазик.
+Сценариото е запознавање со нова личност.
+Зборувај природно и кратко, како средношколец.
+Одговарај на она што корисникот навистина го напишал.
+Не го оценувај секој одговор и не држи предавања.
+Не претпоставувај дека корисникот е груб или невнимателен само затоа што одговорот е краток.
+Поставувај природни прашања и дозволи разговорот да продолжи.
+Не давај предложени одговори или листи од избори.
+    `.trim();
 
-async function ai(system,msgs){
-  const contents=msgs.map(m=>({
-    role:m.role==='me'?'user':'model',
-    parts:[{text:m.text}]
-  }));
+    const picks = [
+      {
+        them: 'Здраво! Мислам дека не сме се запознале. Јас сум Алекс. Како се викаш?'
+      },
+      {
+        them: 'Мило ми е! Како ти оди денот досега?'
+      }
+    ];
 
-  const payload=JSON.stringify({
-    systemInstruction:{parts:[{text:system}]},
-    contents
-  });
+    const FREE_START =
+      'Баш ми е мило што разговараме! Инаку, што сакаш да правиш во слободно време?';
 
-  const r=WORKER_URL
-    ?await fetch(WORKER_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:payload
-      })
-    :await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/'
-        +MODEL+':generateContent?key='+encodeURIComponent(keyEl.value.trim()),
-        {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:payload
+    const EVALUATION_INSTRUCTIONS = `
+Сега разговорот е завршен. Твојата задача е да го анализираш ЦЕЛИОТ разговор
+и да му дадеш корисна, персонализирана повратна информација на корисникот.
+
+Пиши на природен, разбирлив македонски јазик.
+Биди љубезен, искрен, конкретен и охрабрувачки. Не кажувај дека сè било совршено
+ако има простор за подобрување. Не биди груб и не поставувај дијагнози.
+
+Структурирај ја повратната информација вака:
+
+🌟 ШТО ТИ ОДЕШЕ ДОБРО
+Наведи конкретни работи што корисникот ги направил добро, со примери од разговорот.
+Ако разговорот е краток, кажи го тоа наместо да измислуваш примери.
+
+💬 ШТО МОЖЕШ ДА ПОДОБРИШ
+Предложи најмногу 2-3 конкретни начини да го продолжува разговорот,
+да поставува прашања, да покажува интерес или да одговара поприродно.
+Не критикувај го карактерот на корисникот.
+
+📝 ПРИМЕР ЗА СЛЕДЕН ПАТ
+Дај еден краток пример за подобар одговор во соодветен момент од разговорот,
+само ако навистина има корисна можност за подобрување.
+
+💛 ЗАПОМНИ
+Заврши со кратка охрабрувачка реченица.
+
+Не измислувај пораки што корисникот не ги напишал. Оцени ја комуникацијата според
+контекстот, а не според тоа дали одговорите биле долги или граматички совршени.
+Не давај нумеричка оценка освен ако корисникот експлицитно не ја побарал.
+    `.trim();
+
+    const chat = document.getElementById('chat');
+    const form = document.getElementById('messageForm');
+    const input = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const endButton = document.getElementById('endButton');
+    const phase = document.getElementById('phase');
+    const statusText = document.getElementById('statusText');
+    const hint = document.getElementById('hint');
+    const result = document.getElementById('result');
+    const feedback = document.getElementById('feedback');
+    const progressText = document.getElementById('progressText');
+    const progressNumber = document.getElementById('progressNumber');
+    const progressFill = document.getElementById('progressFill');
+
+    let stage = 0;
+    let busy = false;
+    let finished = false;
+    let hist = [];
+    let userMessageCount = 0;
+
+    function add(className, text) {
+      const element = document.createElement('div');
+      element.className = 'bubble ' + className;
+      element.textContent = text;
+      chat.appendChild(element);
+      chat.scrollTop = chat.scrollHeight;
+      return element;
+    }
+
+    function setProgress() {
+      progressNumber.textContent =
+        userMessageCount + (userMessageCount === 1 ? ' порака' : ' пораки');
+
+      progressText.textContent = userMessageCount === 0
+        ? 'Почеток на вежбата'
+        : 'Разговорот е во тек';
+
+      // Лентата е само визуелен показател, не е лимит.
+      progressFill.style.width =
+        (userMessageCount === 0 ? 0 : Math.min(95, 15 + userMessageCount * 8)) + '%';
+    }
+
+    function setBusy(value) {
+      busy = value;
+      input.disabled = value || finished;
+      sendButton.disabled = value || finished;
+      endButton.disabled = value || finished;
+
+      statusText.textContent = value
+        ? 'Разговорот продолжува...'
+        : finished
+          ? 'Вежбата е завршена'
+          : 'Разговор во тек';
+    }
+
+    function showPrompt(text) {
+      add('them', text);
+      hist.push({ role: 'them', text });
+    }
+
+    async function requestAI(contents, systemInstruction) {
+      const response = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          systemInstruction: {
+            parts: [{ text: systemInstruction }]
+          },
+          contents
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('AI request failed: ' + response.status);
+      }
+
+      const data = await response.json();
+
+      const text =
+        data?.candidates?.[0]?.content?.parts
+          ?.map(part => part.text || '')
+          .join('')
+          .trim()
+        || data?.reply
+        || data?.text
+        || '';
+
+      if (!text) {
+        throw new Error('Empty AI response');
+      }
+
+      return text;
+    }
+
+    function getConversationContents() {
+      return hist.map(item => ({
+        role: item.role === 'them' ? 'model' : 'user',
+        parts: [{ text: item.text }]
+      }));
+    }
+
+    async function getAIReply() {
+      return requestAI(getConversationContents(), PERSONA);
+    }
+
+    async function getEvaluation() {
+      const contents = getConversationContents();
+
+      // Инструкцијата за оценување се додава по вистинскиот разговор,
+      // за AI да го оцени целиот разговор наместо да продолжи да глуми лик.
+      contents.push({
+        role: 'user',
+        parts: [{
+          text: 'Разговорот е завршен. Сега дај ми повратна информација според инструкциите.'
+        }]
+      });
+
+      return requestAI(contents, EVALUATION_INSTRUCTIONS);
+    }
+
+    async function start() {
+      stage = 0;
+      busy = false;
+      finished = false;
+      hist = [];
+      userMessageCount = 0;
+
+      chat.innerHTML = '';
+      result.hidden = true;
+      feedback.textContent = '';
+      input.value = '';
+      input.disabled = false;
+      sendButton.disabled = false;
+      endButton.disabled = false;
+      input.placeholder = 'Напиши го твојот одговор...';
+
+      phase.textContent = 'Запознавање';
+      hint.textContent = 'Пишувај со свои зборови. Разговорот нема ограничување на бројот на пораки.';
+      setProgress();
+      setBusy(false);
+
+      showPrompt(picks[0].them);
+      input.focus();
+    }
+
+    async function respondToUser(userText) {
+      add('me', userText);
+      hist.push({ role: 'me', text: userText });
+      userMessageCount++;
+      setProgress();
+
+      // Првите две пораки го воведуваат корисникот во сценариото.
+      if (stage < picks.length) {
+        stage++;
+
+        if (stage < picks.length) {
+          phase.textContent = 'Запознавање';
+          showPrompt(picks[stage].them);
+          return;
         }
-      );
 
-  const j=await r.json();
+        phase.textContent = 'Разговор';
+        showPrompt(FREE_START);
+        return;
+      }
 
-  if(!r.ok)throw new Error((j.error&&j.error.message)||'Грешка со API');
+      // По воведот, AI продолжува со разговорот без лимит на пораки.
+      const typing = document.createElement('div');
+      typing.className = 'typing';
+      typing.textContent = 'Пишува...';
+      chat.appendChild(typing);
+      chat.scrollTop = chat.scrollHeight;
 
-  const reply=j.candidates?.[0]?.content?.parts?.[0]?.text;
-  if(!reply)throw new Error('AI не врати одговор.');
+      try {
+        const reply = await getAIReply();
+        typing.remove();
+        add('them', reply);
+        hist.push({ role: 'them', text: reply });
+      } catch (error) {
+        typing.remove();
+        console.error('AI reply error:', error);
 
-  return reply.trim();
-}
-
-function pick(i){
-  if(i>=picks.length){
-    phase.textContent='Дел 2: напиши сам ('+MAXT+' одговори)';
-    add('b them',FREE_START);
-    hist.push({role:'them',text:FREE_START});
-    input.focus();
-    return;
-  }
-
-  add('b them',picks[i].them);
-  hist.push({role:'them',text:picks[i].them});
-
-  // Не се прикажуваат понудени одговори.
-  opts.innerHTML='';
-  input.focus();
-}
-
-form.addEventListener('submit',async e=>{
-  e.preventDefault();
-
-  if(waitingForAI||finished)return;
-
-  const text=input.value.trim();
-  if(!text)return;
-
-  input.value='';
-  add('b me',text);
-  hist.push({role:'me',text});
-
-  // Првите две прашања: корисникот пишува сам.
-  if(pickIndex<picks.length){
-    pickIndex++;
-    pick(pickIndex);
-    return;
-  }
-
-  waitingForAI=true;
-  send.disabled=true;
-  input.disabled=true;
-
-  turns++;
-
-  const wait=add('b them','...');
-  let reply;
-
-  if(hasAI()){
-    try{
-      reply=await ai(
-        PERSONA+' Одговарај на македонски (кирилица), со 1 до 2 кратки реченици, како вистинска личност а не како асистент. Одговори природно на последната порака и одржувај го контекстот. Не давај совети.',
-        hist
-      );
-    }catch(err){
-      add('tip no',err.message);
-      reply=SCRIPTED[Math.min(turns-1,SCRIPTED.length-1)];
+        add(
+          'them',
+          'Изгледа имам мал технички проблем во моментов. Можеш да продолжиш со следната порака или да го завршиш разговорот.'
+        );
+      }
     }
-  }else{
-    reply=SCRIPTED[Math.min(turns-1,SCRIPTED.length-1)];
-  }
 
-  wait.textContent=reply;
-  hist.push({role:'them',text:reply});
+    async function endConversation() {
+      if (busy || finished) return;
 
-  waitingForAI=false;
-  send.disabled=false;
-  input.disabled=false;
+      finished = true;
+      setBusy(true);
 
-  if(turns>=MAXT){
-    finished=true;
-    form.hidden=true;
-    await finish();
-  }else{
-    input.focus();
-  }
-});
+      phase.textContent = 'Анализа';
+      statusText.textContent = 'AI го анализира разговорот';
+      hint.textContent = 'Почекај момент додека се подготвува повратната информација.';
+      input.placeholder = 'Разговорот е завршен.';
 
-async function finish(){
-  phase.textContent='Готово';
+      result.hidden = false;
+      feedback.textContent = 'Го анализираме твојот разговор. Ова може да потрае неколку секунди.';
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-  let fb='Совет: во секој одговор дај малку информација за себе и врати едно прашање. За повратна информација напишана за твојот разговор, потребен е AI.';
+      const typing = document.createElement('div');
+      typing.className = 'typing';
+      typing.textContent = 'AI ја анализира твојата комуникација...';
+      chat.appendChild(typing);
+      chat.scrollTop = chat.scrollHeight;
 
-  if(hasAI()){
-    try{
-      const t=hist.map(m=>
-        (m.role==='me'?'Вежбач: ':'Соговорник: ')+m.text
-      ).join('\n');
-
-      fb=await ai(
-        'Ти си љубезен тренер за социјални вештини. Напиши на македонски (кирилица) кратка повратна информација за разговорот: една работа што помина добро и еден конкретен совет. Максимум 3 реченици.',
-        [{role:'me',text:t}]
-      );
-    }catch(err){
-      add('tip no',err.message);
+      try {
+        if (userMessageCount === 0) {
+          feedback.textContent =
+            'Сè уште немаш испратено порака, па нема разговор што може да се анализира. Пробај повторно и започни со поздрав!';
+        } else {
+          feedback.textContent = await getEvaluation();
+        }
+      } catch (error) {
+        console.error('Evaluation error:', error);
+        feedback.textContent =
+          'Не успеав да ја добијам AI-анализата поради технички проблем. Твојот разговор е зачуван во тековната сесија. Обиди се повторно со нов разговор.';
+      } finally {
+        typing.remove();
+        phase.textContent = 'Завршено!';
+        statusText.textContent = 'Вежбата е завршена';
+        progressText.textContent = 'Анализата е готова';
+        progressFill.style.width = '100%';
+        setBusy(false);
+        input.disabled = true;
+        sendButton.disabled = true;
+        endButton.disabled = true;
+        hint.textContent = 'Можеш да ја повториш вежбата кога сакаш.';
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
-  }
 
-  add('tip',fb);
-  btn('Пробај повторно',()=>location.reload());
-}
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
 
-// Почеток на вежбата
-pick(0);
-</script>
+      if (busy || finished) return;
+
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      input.value = '';
+      setBusy(true);
+
+      try {
+        await respondToUser(userText);
+      } finally {
+        if (!finished) {
+          setBusy(false);
+          input.focus();
+        }
+      }
+    });
+
+    endButton.addEventListener('click', endConversation);
+    document.getElementById('retryButton').addEventListener('click', start);
+
+    start();
+  </script>
 </body>
 </html>
