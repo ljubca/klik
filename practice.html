@@ -20,6 +20,11 @@
       --ink: #293344;
       --muted: #718096;
       --border: #e6eaf0;
+      --card: rgba(255,255,255,.94);
+      --header-bg: #fbfcff;
+      --other-bubble: #edf4ff;
+      --user-bubble: #ffebe7;
+      --input-bg: #ffffff;
     }
 
     * { box-sizing: border-box; }
@@ -34,6 +39,7 @@
         var(--cream);
       color: var(--ink);
       font-family: 'Onest', sans-serif;
+      transition: background .25s, color .25s;
     }
 
     button, textarea { font: inherit; }
@@ -61,6 +67,13 @@
 
     .logo span { color: var(--blue-dark); }
 
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
     .tag {
       padding: 8px 13px;
       border-radius: 999px;
@@ -68,6 +81,23 @@
       font-size: 12px;
       font-weight: 700;
     }
+
+    .theme-toggle {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--input-bg);
+      color: var(--ink);
+      font-size: 19px;
+      cursor: pointer;
+      transition: transform .2s, background .2s;
+    }
+
+    .theme-toggle:hover { transform: rotate(-8deg); }
 
     .heading { margin-bottom: 18px; }
 
@@ -150,7 +180,7 @@
       overflow: hidden;
       border: 1px solid var(--border);
       border-radius: 23px;
-      background: rgba(255,255,255,.94);
+      background: var(--card);
       box-shadow: 0 12px 35px rgba(47,66,93,.07);
     }
 
@@ -160,7 +190,7 @@
       gap: 11px;
       padding: 15px 18px;
       border-bottom: 1px solid var(--border);
-      background: #fbfcff;
+      background: var(--header-bg);
     }
 
     .avatar {
@@ -219,20 +249,20 @@
     .them {
       align-self: flex-start;
       border-bottom-left-radius: 5px;
-      background: #edf4ff;
+      background: var(--other-bubble);
     }
 
     .me {
       align-self: flex-end;
       border-bottom-right-radius: 5px;
-      background: #ffebe7;
+      background: var(--user-bubble);
     }
 
     .typing {
       align-self: flex-start;
       padding: 11px 14px;
       border-radius: 15px;
-      background: #edf4ff;
+      background: var(--other-bubble);
       color: var(--muted);
       font-size: 13px;
     }
@@ -240,7 +270,7 @@
     .composer {
       padding: 14px;
       border-top: 1px solid var(--border);
-      background: #fbfcff;
+      background: var(--header-bg);
     }
 
     .composer form {
@@ -260,7 +290,7 @@
       border: 1px solid #dfe5ee;
       border-radius: 15px;
       outline: none;
-      background: white;
+      background: var(--input-bg);
       color: var(--ink);
       font-size: 14px;
       line-height: 1.5;
@@ -269,6 +299,11 @@
     .composer textarea:focus {
       border-color: var(--blue-dark);
       box-shadow: 0 0 0 3px rgba(70,121,185,.1);
+    }
+
+    .composer textarea:disabled {
+      opacity: .65;
+      cursor: not-allowed;
     }
 
     .send {
@@ -326,7 +361,7 @@
       padding: 20px;
       border: 1px solid #d4e5f8;
       border-radius: 20px;
-      background: white;
+      background: var(--card);
     }
 
     .result h2 {
@@ -337,7 +372,7 @@
     }
 
     .result p {
-      color: #536175;
+      color: var(--muted);
       font-size: 14px;
       line-height: 1.8;
       white-space: pre-wrap;
@@ -356,12 +391,119 @@
 
     [hidden] { display: none !important; }
 
+    /* Dark mode */
+    body.dark-mode {
+      --cream: #171923;
+      --ink: #f0f1f8;
+      --muted: #b0b6c8;
+      --border: #36394a;
+      --card: #20222e;
+      --header-bg: #1c1e29;
+      --other-bubble: #2c3850;
+      --user-bubble: #493330;
+      --input-bg: #272936;
+      --blue: #354c70;
+      --blue-dark: #85baff;
+      --coral: #684440;
+      --yellow: #66572f;
+
+      background:
+        radial-gradient(circle at 10% 5%, #252c42 0, transparent 35%),
+        radial-gradient(circle at 90% 90%, #382727 0, transparent 35%),
+        var(--cream);
+      color: var(--ink);
+    }
+
+    body.dark-mode .scenario {
+      background: var(--card);
+      border-color: var(--border);
+    }
+
+    body.dark-mode .chat-card,
+    body.dark-mode .result {
+      background: var(--card);
+      border-color: var(--border);
+    }
+
+    body.dark-mode .chat-header,
+    body.dark-mode .composer {
+      background: var(--header-bg);
+      border-color: var(--border);
+    }
+
+    body.dark-mode .them,
+    body.dark-mode .typing {
+      background: var(--other-bubble);
+      color: var(--ink);
+    }
+
+    body.dark-mode .me {
+      background: var(--user-bubble);
+      color: #fff0ed;
+    }
+
+    body.dark-mode .composer textarea {
+      background: var(--input-bg);
+      color: var(--ink);
+      border-color: #44485b;
+    }
+
+    body.dark-mode .composer textarea:focus {
+      border-color: var(--blue-dark);
+    }
+
+    body.dark-mode .theme-toggle {
+      background: #292c3a;
+      color: #fff;
+      border-color: #45495c;
+    }
+
+    body.dark-mode .end-button {
+      background: #49302f;
+      color: #ffd5ce;
+      border-color: #69413e;
+    }
+
+    body.dark-mode .retry {
+      background: #354c70;
+      color: #f0f1f8;
+    }
+
+    body.dark-mode .progress-track {
+      background: #343746;
+    }
+
+    body.dark-mode .tag,
+    body.dark-mode .phase {
+      color: #fff8e5;
+    }
+
     @media (max-width: 480px) {
       body { padding: 17px 10px; }
-      .tag { font-size: 10px; }
-      .chat { min-height: 240px; padding: 15px 12px; }
+
+      .top-actions { gap: 6px; }
+
+      .theme-toggle {
+        width: 38px;
+        height: 38px;
+      }
+
+      .tag {
+        padding: 7px 9px;
+        font-size: 10px;
+      }
+
+      .chat {
+        min-height: 240px;
+        padding: 15px 12px;
+      }
+
       .bubble { max-width: 92%; }
-      .phase { max-width: 105px; line-height: 1.4; }
+
+      .phase {
+        max-width: 105px;
+        line-height: 1.4;
+      }
     }
   </style>
 </head>
@@ -370,7 +512,17 @@
   <main class="page">
     <header class="top">
       <div class="logo">клик<span>.</span></div>
-      <div class="tag">ВЕЖБА ЗА КОМУНИКАЦИЈА</div>
+
+      <div class="top-actions">
+        <div class="tag">ВЕЖБА ЗА КОМУНИКАЦИЈА</div>
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Вклучи темна тема"
+          title="Смени тема"
+        >🌙</button>
+      </div>
     </header>
 
     <section class="heading">
@@ -420,7 +572,7 @@
           <button class="send" id="sendButton" type="submit" aria-label="Испрати">➤</button>
         </form>
 
-        <p class="hint" id="hint">Пишувај со свои зборови. Нема понудени одговори.</p>
+        <p class="hint" id="hint">Пишувај со свои зборови. Разговорот нема ограничување на бројот на пораки.</p>
 
         <div class="end-row">
           <button class="end-button" id="endButton" type="button">
@@ -465,14 +617,14 @@
       'Баш ми е мило што разговараме! Инаку, што сакаш да правиш во слободно време?';
 
     const EVALUATION_INSTRUCTIONS = `
-Сега разговорот е завршен. Твојата задача е да го анализираш ЦЕЛИОТ разговор
-и да му дадеш корисна, персонализирана повратна информација на корисникот.
+Разговорот е завршен. Анализирај го ЦЕЛИОТ разговор и дај корисна,
+персонализирана повратна информација на македонски јазик.
 
-Пиши на природен, разбирлив македонски јазик.
-Биди љубезен, искрен, конкретен и охрабрувачки. Не кажувај дека сè било совршено
-ако има простор за подобрување. Не биди груб и не поставувај дијагнози.
+Биди искрен, конкретен, љубезен и охрабрувачки.
+Не кажувај дека сè било совршено ако има простор за подобрување.
+Не биди груб и не поставувај дијагнози.
 
-Структурирај ја повратната информација вака:
+Користи ги овие делови:
 
 🌟 ШТО ТИ ОДЕШЕ ДОБРО
 Наведи конкретни работи што корисникот ги направил добро, со примери од разговорот.
@@ -484,15 +636,16 @@
 Не критикувај го карактерот на корисникот.
 
 📝 ПРИМЕР ЗА СЛЕДЕН ПАТ
-Дај еден краток пример за подобар одговор во соодветен момент од разговорот,
-само ако навистина има корисна можност за подобрување.
+Дај еден краток пример за подобар одговор во соодветен момент,
+само ако има корисна можност за подобрување.
 
 💛 ЗАПОМНИ
 Заврши со кратка охрабрувачка реченица.
 
-Не измислувај пораки што корисникот не ги напишал. Оцени ја комуникацијата според
-контекстот, а не според тоа дали одговорите биле долги или граматички совршени.
-Не давај нумеричка оценка освен ако корисникот експлицитно не ја побарал.
+Не измислувај пораки што корисникот не ги напишал.
+Оцени ја комуникацијата според контекстот, а не според должината
+или граматичката совршеност на одговорите.
+Не давај нумеричка оценка освен ако корисникот не ја побара.
     `.trim();
 
     const chat = document.getElementById('chat');
@@ -508,12 +661,25 @@
     const progressText = document.getElementById('progressText');
     const progressNumber = document.getElementById('progressNumber');
     const progressFill = document.getElementById('progressFill');
+    const themeToggle = document.getElementById('themeToggle');
 
     let stage = 0;
     let busy = false;
     let finished = false;
     let hist = [];
     let userMessageCount = 0;
+
+    // Dark / Light mode
+    themeToggle.addEventListener('click', function () {
+      const isDark = document.body.classList.toggle('dark-mode');
+
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      themeToggle.setAttribute(
+        'aria-label',
+        isDark ? 'Вклучи светла тема' : 'Вклучи темна тема'
+      );
+      themeToggle.title = isDark ? 'Светла тема' : 'Темна тема';
+    });
 
     function add(className, text) {
       const element = document.createElement('div');
@@ -532,7 +698,7 @@
         ? 'Почеток на вежбата'
         : 'Разговорот е во тек';
 
-      // Лентата е само визуелен показател, не е лимит.
+      // Ова е визуелен показател, а не ограничување на пораките.
       progressFill.style.width =
         (userMessageCount === 0 ? 0 : Math.min(95, 15 + userMessageCount * 8)) + '%';
     }
@@ -558,9 +724,7 @@
     async function requestAI(contents, systemInstruction) {
       const response = await fetch(WORKER_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: MODEL,
           systemInstruction: {
@@ -585,9 +749,7 @@
         || data?.text
         || '';
 
-      if (!text) {
-        throw new Error('Empty AI response');
-      }
+      if (!text) throw new Error('Empty AI response');
 
       return text;
     }
@@ -606,19 +768,17 @@
     async function getEvaluation() {
       const contents = getConversationContents();
 
-      // Инструкцијата за оценување се додава по вистинскиот разговор,
-      // за AI да го оцени целиот разговор наместо да продолжи да глуми лик.
       contents.push({
         role: 'user',
         parts: [{
-          text: 'Разговорот е завршен. Сега дај ми повратна информација според инструкциите.'
+          text: 'Разговорот е завршен. Сега анализирај го разговорот и дај ми повратна информација според инструкциите.'
         }]
       });
 
       return requestAI(contents, EVALUATION_INSTRUCTIONS);
     }
 
-    async function start() {
+    function start() {
       stage = 0;
       busy = false;
       finished = false;
@@ -649,22 +809,22 @@
       userMessageCount++;
       setProgress();
 
-      // Првите две пораки го воведуваат корисникот во сценариото.
+      // Првите две пораки се вовед во сценариото.
       if (stage < picks.length) {
         stage++;
 
         if (stage < picks.length) {
           phase.textContent = 'Запознавање';
           showPrompt(picks[stage].them);
-          return;
+        } else {
+          phase.textContent = 'Разговор';
+          showPrompt(FREE_START);
         }
 
-        phase.textContent = 'Разговор';
-        showPrompt(FREE_START);
         return;
       }
 
-      // По воведот, AI продолжува со разговорот без лимит на пораки.
+      // Потоа AI го продолжува разговорот без лимит на пораки.
       const typing = document.createElement('div');
       typing.className = 'typing';
       typing.textContent = 'Пишува...';
@@ -679,10 +839,9 @@
       } catch (error) {
         typing.remove();
         console.error('AI reply error:', error);
-
         add(
           'them',
-          'Изгледа имам мал технички проблем во моментов. Можеш да продолжиш со следната порака или да го завршиш разговорот.'
+          'Изгледа имам технички проблем во моментов. Можеш да испратиш нова порака или да го завршиш разговорот.'
         );
       }
     }
@@ -699,7 +858,7 @@
       input.placeholder = 'Разговорот е завршен.';
 
       result.hidden = false;
-      feedback.textContent = 'Го анализираме твојот разговор. Ова може да потрае неколку секунди.';
+      feedback.textContent = 'AI го анализира разговорот. Ова може да потрае неколку секунди.';
       result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
       const typing = document.createElement('div');
@@ -718,7 +877,7 @@
       } catch (error) {
         console.error('Evaluation error:', error);
         feedback.textContent =
-          'Не успеав да ја добијам AI-анализата поради технички проблем. Твојот разговор е зачуван во тековната сесија. Обиди се повторно со нов разговор.';
+          'Не успеав да ја добијам AI-анализата поради технички проблем. Провери дали AI-сервисот работи и обиди се повторно со нов разговор.';
       } finally {
         typing.remove();
         phase.textContent = 'Завршено!';
