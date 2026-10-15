@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="mk">
 <head>
@@ -43,12 +44,12 @@ details p{margin-top:8px;font-size:14px}
 <div class="top"><a class="logo" href="index.html">Клик<i></i></a><a class="back" href="index.html">Назад</a></div>
 <main>
   <h1>Запознавање со нова личност</h1>
-  <p class="sub">Прво избираш одговор, потоа пишуваш сам.</p>
+  <p class="sub">Сами пишуваш одговори и вежбаш вистински разговор.</p>
   <div class="panel">
-    <div class="phase" id="phase">Дел 1: избери одговор</div>
+    <div class="phase" id="phase">Дел 1: напиши сам</div>
     <div id="chat" aria-live="polite"></div>
     <div id="opts"></div>
-    <form id="form" hidden>
+    <form id="form">
       <textarea id="input" placeholder="Напиши го твојот одговор..." required></textarea>
       <button class="send" id="send" type="submit">Прати</button>
     </form>
@@ -81,7 +82,7 @@ const SCRIPTED=['Супер, ајде. Што те донесе овде ток�
 const MAXT=3;
 
 const chat=document.getElementById('chat'),opts=document.getElementById('opts'),form=document.getElementById('form'),input=document.getElementById('input'),send=document.getElementById('send'),keyEl=document.getElementById('key'),phase=document.getElementById('phase');
-let hist=[],score=0,turns=0;
+let hist=[],score=0,turns=0,pickIndex=0;
 const hasAI=()=>WORKER_URL||keyEl.value.trim();
 if(WORKER_URL)document.getElementById('keybox').hidden=true;
 try{keyEl.value=sessionStorage.getItem('gk')||''}catch(e){}
@@ -103,30 +104,68 @@ async function ai(system,msgs){
 
 function pick(i){
  if(i>=picks.length){
-  add('tip','Избор: '+score+' од '+picks.length+' добри одговори. Сега пишуваш сам.');
   phase.textContent='Дел 2: напиши сам ('+MAXT+' одговори)';
-  add('b them',FREE_START);hist.push({role:'them',text:FREE_START});
-  form.hidden=false;input.focus();return}
- add('b them',picks[i].them);hist.push({role:'them',text:picks[i].them});
- picks[i].opts.forEach(o=>btn(o.t,()=>{
-  opts.innerHTML='';add('b me',o.t);hist.push({role:'me',text:o.t});score+=o.ok;
-  add(o.ok?'tip':'tip no',o.tip);setTimeout(()=>pick(i+1),900)}));
+  add('b them',FREE_START);
+  hist.push({role:'them',text:FREE_START});
+  form.hidden=false;
+  input.focus();
+  return;
+ }
+
+ add('b them',picks[i].them);
+ hist.push({role:'them',text:picks[i].them});
+ form.hidden=false;
+ input.focus();
 }
 
 form.addEventListener('submit',async e=>{
  e.preventDefault();
- const text=input.value.trim();if(!text)return;
- input.value='';send.disabled=true;
- add('b me',text);hist.push({role:'me',text});turns++;
+
+ const text=input.value.trim();
+ if(!text)return;
+
+ input.value='';
+ send.disabled=true;
+ add('b me',text);
+ hist.push({role:'me',text});
+
+ // Првите две пораки се дел од воведниот разговор.
+ // Корисникот пишува сам, без понудени одговори.
+ if(pickIndex<picks.length){
+  pickIndex++;
+  pick(pickIndex);
+  send.disabled=false;
+  input.focus();
+  return;
+ }
+
+ // Продолжување на разговорот со AI или готови реплики.
+ turns++;
  const wait=add('b them','...');
  let reply;
+
  if(hasAI()){
-  try{reply=await ai(PERSONA+' Одговарај на македонски (кирилица), со 1 до 2 кратки реченици, како вистинска личност а не како асистент. Не давај совети.',hist)}
-  catch(err){add('tip no',err.message);reply=SCRIPTED[turns-1]}
- }else{reply=SCRIPTED[turns-1]}
- wait.textContent=reply;hist.push({role:'them',text:reply});
- if(turns>=MAXT){form.hidden=true;await finish()}
- else{send.disabled=false;input.focus()}
+  try{
+   reply=await ai(PERSONA+' Одговарај на македонски (кирилица), со 1 до 2 кратки реченици, како вистинска личност а не како асистент. Не давај совети.',hist);
+  }
+  catch(err){
+   add('tip no',err.message);
+   reply=SCRIPTED[Math.min(turns-1,SCRIPTED.length-1)];
+  }
+ }else{
+  reply=SCRIPTED[Math.min(turns-1,SCRIPTED.length-1)];
+ }
+
+ wait.textContent=reply;
+ hist.push({role:'them',text:reply});
+
+ if(turns>=MAXT){
+  form.hidden=true;
+  await finish();
+ }else{
+  send.disabled=false;
+  input.focus();
+ }
 });
 
 async function finish(){
@@ -141,6 +180,8 @@ async function finish(){
  add('tip',fb);
  btn('Пробај повторно',()=>location.reload());
 }
+
+// Почеток на вежбата
 pick(0);
 </script>
 </body>
