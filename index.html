@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Клик – вежбај социјални вештини</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9F0F6; --ink:#1B2740; --muted:#52607A; --card:#FFFFFF;
+  --sun:#FFC94D; --coral:#FF8C7A; --sky:#BFD8EE; --line:#C9D6E3;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#141C2E;--ink:#EAF0F8;--muted:#9FB0C8;--card:#1E2942;--sky:#2B3D5E;--line:#2B3A57}
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 Onest,system-ui,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.logo{font:600 22px Unbounded,sans-serif;letter-spacing:-.02em}
+.logo i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--coral);margin-left:4px}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:600;padding:14px 26px;border-radius:999px;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.btn.alt{background:var(--sun);color:#1B2740}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:48px 0 88px}
+h1{font:600 clamp(32px,5vw,52px)/1.12 Unbounded,sans-serif;letter-spacing:-.03em;margin-bottom:22px}
+.hero p{font-size:19px;color:var(--muted);max-width:30em;margin-bottom:32px}
+.note{margin-top:16px;font-size:15px;color:var(--muted)}
+.phone{background:var(--card);border-radius:36px;padding:26px 22px;box-shadow:0 30px 60px -30px rgba(27,39,64,.35);transform:rotate(2deg);max-width:380px;justify-self:center;width:100%}
+.phone h3{font:500 14px Onest;color:var(--muted);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.b{padding:12px 16px;border-radius:20px;margin-bottom:10px;max-width:86%;font-size:16px;line-height:1.45;opacity:0;animation:pop .5s forwards}
+.b.them{background:var(--sky);border-bottom-left-radius:6px}
+.b.me{background:var(--coral);color:#1B2740;margin-left:auto;border-bottom-right-radius:6px}
+.tip{background:var(--sun);color:#1B2740;border-radius:14px;padding:10px 14px;font-size:14px;font-weight:500;margin-top:14px;opacity:0;animation:pop .5s forwards}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.phone{min-height:500px}
+#chat .b,#chat .tip{animation-delay:0s}
+.tip.no{background:var(--sky);color:var(--ink)}
+.opt{display:block;width:100%;text-align:left;background:transparent;border:2px solid var(--line);color:var(--ink);font:500 15px/1.4 Onest,sans-serif;padding:10px 14px;border-radius:16px;margin-top:8px;cursor:pointer;transition:border-color .15s}
+.opt:hover{border-color:var(--coral)}
+.opt:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+section{padding:72px 0;border-top:1px solid var(--line)}
+h2{font:600 clamp(26px,3.6vw,36px)/1.2 Unbounded,sans-serif;letter-spacing:-.02em;margin-bottom:36px;max-width:16em}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;list-style:none;padding:0;counter-reset:s}
+.steps li{counter-increment:s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--sun);color:#1B2740;font:600 18px Unbounded;margin-bottom:16px}
+.steps b{display:block;font-size:19px;margin-bottom:6px}
+.steps span{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:12px}
+.chips span{background:var(--card);padding:12px 20px;border-radius:999px;font-weight:500}
+.chips span:nth-child(3n+1){background:var(--sky)}
+.cta{text-align:center}
+.cta h2{margin:0 auto 28px}
+footer{padding:32px 0 48px;color:var(--muted);font-size:14px;text-align:center}
+@media(max-width:820px){.hero{grid-template-columns:1fr;padding-bottom:56px}.steps{grid-template-columns:1fr}.phone{transform:none}}
+@media(prefers-reduced-motion:reduce){.b,.tip{animation:none;opacity:1}.btn{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav><div class="logo">Клик<i></i></div><a class="btn alt" href="#start">Пробај</a></nav>
+
+  <header class="hero">
+    <div>
+      <h1>Разговорите стануваат полесни кога ќе ги вежбаш</h1>
+      <p>Клик ти нуди кратки, реалистични разговори за секој ден. Вежбаш на мирно, а потоа зборуваш посигурно и во живо.</p>
+      <a class="btn" href="#start">Започни го првиот разговор</a>
+      <div class="note">Пет минути на ден. Без публика.</div>
+    </div>
+    <div class="phone" aria-label="Пример за разговор">
+      <h3>Вежба: запознавање со нова личност</h3>
+      <div id="chat" aria-live="polite"></div>
+      <div id="opts"></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Како изгледа една вежба</h2>
+    <ol class="steps">
+      <li><b>Избери ситуација</b><span>Нарачка во кафуле, прв ден на работа, средба со нов сосед.</span></li>
+      <li><b>Водиш разговор</b><span>Кратка размена, како во живо. Одговараш по свое.</span></li>
+      <li><b>Добиваш совет</b><span>Што помина добро и што да пробаш следниот пат.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Ситуации што можеш да ги вежбаш</h2>
+    <div class="chips">
+      <span>Запознавање со нов сосед</span><span>Љубезно одбивање</span><span>Прашање на состанок</span>
+      <span>Муабет на журка</span><span>Враќање производ</span><span>Покана на кафе</span>
+    </div>
+  </section>
+
+  <section class="cta" id="start">
+    <h2>Првиот разговор е за пет минути</h2>
+    <a class="btn alt" href="#start">Започни</a>
+  </section>
+
+  <footer>Клик, прототип</footer>
+</div>
+
+<script>
+const steps=[
+{them:'Здраво! Не те видов претходно. Си нов во групата?',opts:[
+ {t:'Да.',ok:0,tip:'Премногу кратко. Додај нешто за себе или постави прашање.'},
+ {t:'Да, денес сум првпат. Јас сум Марко.',ok:1,tip:'Добро: се претстави и даде повод за продолжение.'},
+ {t:'Не знам, можеби.',ok:0,tip:'Нејасен одговор го прави разговорот потежок.'}]},
+{them:'Мило ми е! Како не најде?',opts:[
+ {t:'Преку другар. А ти од кога доаѓаш?',ok:1,tip:'Добро: му врати прашање на соговорникот.'},
+ {t:'Преку интернет.',ok:0,tip:'Точно, но разговорот запира. Врати прашање.'},
+ {t:'Не се сеќавам.',ok:0,tip:'Пробај со кратка вистинита причина.'}]},
+{them:'Јас сум тука веќе две години. Ако сакаш, ќе те запознаам со другите.',opts:[
+ {t:'Може, фала! Би ми помогнало.',ok:1,tip:'Добро: прифати љубезно и кажа што ти треба.'},
+ {t:'Не треба.',ok:0,tip:'Одбивање без објаснување звучи студено.'},
+ {t:'Ај, види...',ok:0,tip:'Нејасно е. Кажи да или не со една реченица.'}]}
+];
+const chat=document.getElementById('chat'),opts=document.getElementById('opts');
+let score=0;
+function add(cls,txt){const d=document.createElement('div');d.className=cls;d.textContent=txt;chat.appendChild(d)}
+function btn(txt,fn){const b=document.createElement('button');b.className='opt';b.textContent=txt;b.onclick=fn;opts.appendChild(b)}
+function show(i){
+ if(i>=steps.length){add('tip','Резултат: '+score+' од '+steps.length+' добри одговори.');btn('Пробај повторно',start);return}
+ add('b them',steps[i].them);
+ steps[i].opts.forEach(o=>btn(o.t,()=>{opts.innerHTML='';add('b me',o.t);score+=o.ok;add(o.ok?'tip':'tip no',o.tip);setTimeout(()=>show(i+1),1100)}));
+}
+function start(){chat.innerHTML='';opts.innerHTML='';score=0;show(0)}
+start();
+</script>
+</body>
+</html>
